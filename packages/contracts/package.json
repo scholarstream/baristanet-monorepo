@@ -1,0 +1,11 @@
+{
+  "name": "@barista-fi/contracts",
+  "scripts": {
+    "build": "forge buid",
+    "test": "forge test",
+    "format": "prettier --write ."
+  },
+  "devDependencies": {
+    "prettier-plugin-solidity": "^1.3.1"
+  }
+}
