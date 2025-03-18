@@ -11,6 +11,7 @@ export type BrokerChainData = {
 };
 
 export type Config = {
+  sequencerPrivateKey: string;
   clearingChainData: ClearingChainData;
   brokerChainData: BrokerChainData[];
 };

@@ -1,13 +1,5 @@
-import express, { Request, Response } from 'express';
+import { Api } from './api';
 
-const app = express();
+const api = new Api();
 
-app.use(express.json());
-
-app.get('/', (req: Request, res: Response) => {
-  res.send('Welcome to the RESTful API!');
-});
-
-app.listen(3000, () => {
-  console.log('Server is running on port 3000');
-});
+api.listen(3000);
