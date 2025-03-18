@@ -16,7 +16,22 @@ export class Api {
 
     // GET /solver/{address}
     // { collateral, debt, txHistory }
-    //
+    this.app.get('/solver/:address', (req: Request, res: Response) => {
+      res.send({
+        address: req.params.address,
+        collateralBalance: 0,
+        debts: [
+          { chainId: 421614, token: '0x1234', amount: 100 },
+          { chainId: 84532, token: '0x5678', amount: 200 },
+        ],
+        txHistory: [
+          { chainId: 421614, action: 'deposit', amount: 100 },
+          { chainId: 84532, action: 'borrow', token: '0x1234', amount: 100 },
+          { chainId: 84532, action: 'repay', token: '0x1234', amount: 50 },
+        ],
+      });
+    });
+
     // POST /borrow
     // data: {
     //     solver:   address,

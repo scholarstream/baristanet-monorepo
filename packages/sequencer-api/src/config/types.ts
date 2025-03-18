@@ -10,8 +10,11 @@ export type BrokerChainData = {
   lattePoolAddress: string;
 };
 
-export type Config = {
+export type PrivateConfig = {
   sequencerPrivateKey: string;
+};
+
+export type Config = {
   clearingChainData: ClearingChainData;
   brokerChainData: BrokerChainData[];
 };

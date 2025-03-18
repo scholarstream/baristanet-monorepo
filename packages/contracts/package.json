@@ -1,7 +1,7 @@
 {
   "name": "@baristanet/contracts",
   "scripts": {
-    "build": "forge buid",
+    "build": "forge build",
     "test": "forge test",
     "format": "prettier --write ."
   },

@@ -7,43 +7,47 @@ import {IWETH9 as IWETH} from "./interfaces/IWETH9.sol";
 import {ReentrancyGuard} from "@openzeppelin/contracts/utils/ReentrancyGuard.sol";
 
 contract BrewHouse is ReentrancyGuard {
-    using SafeERC20 for IERC20;
+  using SafeERC20 for IERC20;
 
-    error InsufficientCollateral();
-    error OnlySequencer();
+  error InsufficientCollateral();
+  error OnlySequencer();
 
-    address public sequencer;
+  address public sequencer;
 
-    IWETH public constant weth = IWETH(0x82aF49447D8a07e3bd95BD0d56f35241523fBab1);
+  IWETH public weth;
 
-    mapping(address => uint256) public collateral;
+  mapping(address => uint256) public collateral;
 
-    constructor(address _sequencer) {
-        sequencer = _sequencer;
-    }
+  constructor(address _sequencer, address _weth) {
+    sequencer = _sequencer;
+    weth = IWETH(_weth);
+  }
 
-    function depositCollateral(uint256 amount) external payable nonReentrant {
-        weth.deposit{value: amount}();
-        collateral[msg.sender] += amount;
-    }
+  function depositCollateral() external payable nonReentrant {
+    weth.deposit{value: msg.value}();
+    collateral[msg.sender] += msg.value;
+  }
 
-    function withdrawCollateral(uint256 amount) external nonReentrant {
-        if (collateral[msg.sender] < amount) revert InsufficientCollateral();
-        collateral[msg.sender] -= amount;
-        weth.withdraw(amount);
-        payable(msg.sender).transfer(amount);
-    }
+  function withdrawCollateral(uint256 amount) external nonReentrant {
+    if (collateral[msg.sender] < amount) revert InsufficientCollateral();
+    collateral[msg.sender] -= amount;
+    weth.withdraw(amount);
+    payable(msg.sender).transfer(amount);
+  }
 
-    function slashCollateral(address user, uint256 amount) external onlySequencer {
-        collateral[user] -= amount;
-        weth.withdraw(amount);
-        payable(sequencer).transfer(amount);
-    }
+  function slashCollateral(
+    address user,
+    uint256 amount
+  ) external onlySequencer {
+    collateral[user] -= amount;
+    weth.withdraw(amount);
+    payable(sequencer).transfer(amount);
+  }
 
-    receive() external payable {}
+  receive() external payable {}
 
-    modifier onlySequencer() {
-        if (msg.sender != sequencer) revert OnlySequencer();
-        _;
-    }
+  modifier onlySequencer() {
+    if (msg.sender != sequencer) revert OnlySequencer();
+    _;
+  }
 }
