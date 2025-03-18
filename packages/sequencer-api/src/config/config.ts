@@ -1,10 +1,13 @@
-import { Config } from './types';
+import { Config, PrivateConfig } from './types';
 import dotenv from 'dotenv';
 
 dotenv.config();
 
-export const config: Config = {
+export const ___privateConfig___: PrivateConfig = {
   sequencerPrivateKey: process.env.SEQUENCER_PRIVATE_KEY || '',
+};
+
+export const config: Config = {
   clearingChainData: {
     chainId: 421614, // arbitrum sepolia
     rpc: 'https://arbitrum-sepolia-rpc.publicnode.com',
