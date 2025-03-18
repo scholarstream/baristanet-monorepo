@@ -6,20 +6,15 @@ dotenv.config();
 export const config: Config = {
   sequencerPrivateKey: process.env.SEQUENCER_PRIVATE_KEY || '',
   clearingChainData: {
-    chainId: 1337,
-    rpc: 'http://localhost:8545',
-    brewHouseAddress: '0x...',
+    chainId: 421614, // arbitrum sepolia
+    rpc: 'https://arbitrum-sepolia-rpc.publicnode.com',
+    brewHouseAddress: '0x0495f98b412c34526c5135eeff763d56cb31139a',
   },
   brokerChainData: [
     {
-      chainId: 1337,
-      rpc: 'http://localhost:8545',
-      lattePoolAddress: '0x...',
-    },
-    {
-      chainId: 1337,
-      rpc: 'http://localhost:8545',
-      lattePoolAddress: '0x...',
+      chainId: 84532, // base sepolia
+      rpc: 'https://base-sepolia-rpc.publicnode.com',
+      lattePoolAddress: '0x0495f98b412c34526c5135eeff763d56cb31139a',
     },
   ],
 };
