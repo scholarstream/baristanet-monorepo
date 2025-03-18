@@ -8,13 +8,15 @@
     "format": "prettier --write ."
   },
   "devDependencies": {
+    "@types/express": "^5.0.0",
     "@types/node": "^20.14.10",
     "prettier": "^3.3.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.5.3"
   },
   "dependencies": {
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "express": "^4.21.2"
   },
   "keywords": [],
   "author": "",
