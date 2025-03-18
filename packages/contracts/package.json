@@ -1,5 +1,5 @@
 {
-  "name": "@barista-fi/contracts",
+  "name": "@baristanet/contracts",
   "scripts": {
     "build": "forge buid",
     "test": "forge test",
