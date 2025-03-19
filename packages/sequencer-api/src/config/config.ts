@@ -1,7 +1,15 @@
 import { Config, PrivateConfig } from './types';
 import dotenv from 'dotenv';
 import { anvil, arbitrumSepolia, baseSepolia } from 'viem/chains';
-import { createPublicClient, http, PublicClient } from 'viem';
+import {
+  createPublicClient,
+  http,
+  PublicClient,
+  WalletClient,
+  createWalletClient,
+  Address,
+} from 'viem';
+import { privateKeyToAccount } from 'viem/accounts';
 
 dotenv.config();
 
@@ -24,7 +32,7 @@ export const publicConfig: Config = {
   ],
 };
 
-export const createClientFromChainId = (
+export const createPublicClientFromChainId = (
   chainId: number,
   rpcUrl: string | undefined = undefined,
 ): PublicClient => {
@@ -46,4 +54,33 @@ export const createClientFromChainId = (
     chain: anvil,
     transport: http(rpcUrl),
   }) as PublicClient;
+};
+
+export const createWalletClientFromChainId = (
+  privateKey: string,
+  chainId: number,
+  rpcUrl: string | undefined = undefined,
+): WalletClient => {
+  const account = privateKeyToAccount(privateKey as Address);
+  if (chainId === 421614) {
+    return createWalletClient({
+      account,
+      chain: arbitrumSepolia,
+      transport: http(rpcUrl),
+    }) as WalletClient;
+  }
+
+  if (chainId === 84532) {
+    return createWalletClient({
+      account,
+      chain: baseSepolia,
+      transport: http(rpcUrl),
+    }) as WalletClient;
+  }
+
+  return createWalletClient({
+    account,
+    chain: anvil,
+    transport: http(rpcUrl),
+  }) as WalletClient;
 };
