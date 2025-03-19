@@ -1,4 +1,10 @@
 import express, { Request, Response } from 'express';
+import { createClientFromChainId, publicConfig } from '../config';
+import { Address, parseAbi } from 'viem';
+
+const brewHouseAbi = parseAbi([
+  'function collateral(address) view returns (uint256)',
+]);
 
 export class Api {
   public app: express.Application = express();
@@ -16,10 +22,33 @@ export class Api {
 
     // GET /solver/{address}
     // { collateral, debt, txHistory }
-    this.app.get('/solver/:address', (req: Request, res: Response) => {
+    this.app.get('/solver/:address', async (req: Request, res: Response) => {
+      const { clearingChainData, brokerChainData } = publicConfig;
+
+      // get the clearing chain client
+      const client = createClientFromChainId(
+        clearingChainData.chainId,
+        clearingChainData.rpc,
+      );
+
+      // get the address collateral balance
+      const solverAddress = req.params.address;
+      const collateralBalance = (await client.readContract({
+        address: clearingChainData.brewHouseAddress as Address,
+        abi: brewHouseAbi,
+        functionName: 'collateral',
+        args: [solverAddress as Address],
+      })) as bigint;
+
+      // get the broker chains
+      // mapping(address => mapping(address => uint256)) public borrowed;
+      // LattePool.borrowed(solverAddress, tokenAddress) = borrowedAmount
+      // need to know the token lp'ed
+      // need to add lp function + event
+      // for each, get the debt
       res.send({
         address: req.params.address,
-        collateralBalance: 0,
+        collateralBalance: collateralBalance.toString(),
         debts: [
           { chainId: 421614, token: '0x1234', amount: 100 },
           { chainId: 84532, token: '0x5678', amount: 200 },
