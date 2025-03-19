@@ -78,6 +78,18 @@ export class Api {
     //
     //     // deadline:   uint256,
     // }
+    this.app.post('/borrow', async (req: Request, res: Response) => {
+      const { solver, token, amount } = req.body;
+      res.send({
+        sequencer: '0x1234',
+        signature: '0x5678',
+        data: {
+          solver,
+          token,
+          amount,
+        },
+      });
+    });
   }
 
   listen(port: number) {
