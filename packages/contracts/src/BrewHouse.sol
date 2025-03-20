@@ -13,10 +13,16 @@ contract BrewHouse is ReentrancyGuard {
   error OnlySequencer();
 
   address public sequencer;
-
   IWETH public weth;
-
   mapping(address => uint256) public collateral;
+
+  event CollateralDeposited(address indexed user, uint256 amount);
+  event CollateralWithdrawn(address indexed user, uint256 amount);
+  event CollateralSlashed(
+    address indexed user,
+    uint256 amount,
+    address indexed sequencer
+  );
 
   constructor(address _sequencer, address _weth) {
     sequencer = _sequencer;
@@ -26,6 +32,7 @@ contract BrewHouse is ReentrancyGuard {
   function depositCollateral() external payable nonReentrant {
     weth.deposit{value: msg.value}();
     collateral[msg.sender] += msg.value;
+    emit CollateralDeposited(msg.sender, msg.value);
   }
 
   function withdrawCollateral(uint256 amount) external nonReentrant {
@@ -33,6 +40,7 @@ contract BrewHouse is ReentrancyGuard {
     collateral[msg.sender] -= amount;
     weth.withdraw(amount);
     payable(msg.sender).transfer(amount);
+    emit CollateralWithdrawn(msg.sender, amount);
   }
 
   function slashCollateral(
@@ -42,6 +50,7 @@ contract BrewHouse is ReentrancyGuard {
     collateral[user] -= amount;
     weth.withdraw(amount);
     payable(sequencer).transfer(amount);
+    emit CollateralSlashed(user, amount, sequencer);
   }
 
   receive() external payable {}
