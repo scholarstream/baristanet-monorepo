@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "format": "prettier --write \"packages/**/src/**/*.ts\" ",
-    "build": "pnpm -r run build",
-    "example": "pnpm --filter \"@baristanet/cli-examples\" -r run example"
+    "build": "pnpm -r run build"
   },
   "keywords": [],
   "author": "",
